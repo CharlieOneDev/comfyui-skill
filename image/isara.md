@@ -243,7 +243,7 @@ Solar System Civilization Friendship and Joint Defense Program
 米娅	Mia	ミア																							
 雪乃	Yukino	雪乃（ゆきの）																							
 神代澪	Kamishiro Mio	神代澪（かみしろ みお）																							
-朝倉千景	Asakura Chikage	朝倉千景（はつね）																							
+朝倉千景	Asakura Chikage	朝倉千景（あさくら ちかげ）																							
 艾琳	Eileen	アイリーン																							
 十七、核心角色职位统一																									
 中文	English	日本語																							
