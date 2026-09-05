@@ -296,7 +296,7 @@ Picture 3
 | 米娅   | 巴尔的摩方向   |
 | 雪乃   | 信浓方向     |
 | 神代澪  | 光辉方向     |
-| 朝仓千景 | 能代方向    |
+| 朝仓千景 | 能代方向     |
 | 艾琳   | 贝尔法斯特方向  |
 
 这些仅用于声音方向定位。
@@ -545,11 +545,228 @@ H3 Native Voice
 然后才允许进入正式：
 
 subject_definitions
+
 summary
+
 retention_analysis
+
 detailed_description
+
 overall_soundscape
+
 non_diegetic_music
+
+---
+
+# 20.1 输出层与生产层分离【最高优先级】
+
+本 Skill 的每个 SCENE / NODE 输出必须严格分为两个层级：
+
+第一层：
+
+**中文审核层**
+
+用于用户检查：
+
+* Scene / Node
+* 时间
+* 标题
+* Picture Mapping
+* Audio Mapping
+* 角色
+* 镜头目标
+* Spoken Content
+* 连续性
+
+第二层：
+
+**英文生产层**
+
+用于直接提交 MiniMax H3。
+
+两层必须保持：
+
+* 视觉分离
+* 结构分离
+* 复制区域分离
+* 职责分离
+
+审核层负责：
+
+**审核。**
+
+生产层负责：
+
+**生产。**
+
+任何情况下，不得把两个层级混成一个复制区域。
+
+---
+
+# 20.2 中文审核区与英文正式 Prompt 必须完全分离【最高优先级】
+
+每个 Node 必须输出两个完全独立的区域：
+
+区域 A：
+
+中文 Node 审核区。
+
+区域 B：
+
+英文 MiniMax H3 正式 Prompt。
+
+二者绝不得合并为：
+
+* 同一个代码块
+* 同一个 Writing Block
+* 同一个引用块
+* 同一个“复制区域”
+* 其他单一可复制区域
+
+正确结构必须是：
+
+中文审核区
+
+---
+
+独立英文 H3 Prompt 代码块
+
+---
+
+# 20.3 英文 H3 Prompt 必须拥有唯一、独立的复制区域【强制】
+
+正式 H3 Prompt 必须使用：
+
+**一个独立的 Markdown fenced code block。**
+
+该代码块必须从：
+
+subject_definitions
+
+开始。
+
+并完整包含：
+
+summary
+
+retention_analysis
+
+detailed_description
+
+overall_soundscape
+
+non_diegetic_music
+
+直到：
+
+non_diegetic_music
+
+结束。
+
+该代码块外不得放入属于正式 Prompt 的英文内容。
+
+该代码块之外不得放入：
+
+* 中文 Node 审核说明
+* 图片输入表
+* 音频输入表
+* 角色审核说明
+* 镜头目标
+* Spoken Content 审核表
+* 中文制作备注
+* 中文音频说明
+* 中文输入节点说明
+* 正式 Prompt 的补充英文段落
+
+目的：
+
+用户必须能够直接点击该独立代码块的复制按钮，一次性复制完整英文 H3 Prompt，并直接粘贴到 MiniMax H3 / ComfyUI。
+
+---
+
+# 20.4 中文审核区不得进入正式 Prompt 复制区域
+
+以下内容只能存在于中文审核区：
+
+* 时间
+* 标题
+* 【图片输入分配】
+* 【音频输入分配】
+* 【角色】
+* 【镜头目标】
+* 中文剧情解释
+* 中文制作备注
+* 中文 Spoken Content 审核说明
+* 中文音频说明
+* 中文输入节点说明
+* 用户审核备注
+
+正式 Prompt 只能包含真正需要交给 H3 的内容。
+
+不得为了“方便复制”而将中文审核区直接包进正式英文代码块。
+
+---
+
+# 20.5 正式 Prompt 不得拆成多个独立复制区域
+
+同一个 Node 的：
+
+subject_definitions
+
+summary
+
+retention_analysis
+
+detailed_description
+
+overall_soundscape
+
+non_diegetic_music
+
+必须位于同一个英文代码块中。
+
+禁止：
+
+代码块1：subject_definitions
+
+代码块2：summary
+
+代码块3：retention_analysis
+
+代码块4：detailed_description
+
+代码块5：overall_soundscape
+
+代码块6：non_diegetic_music
+
+必须始终保持：
+
+**一个 Node = 一个完整英文 H3 Prompt 复制区域。**
+
+---
+
+# 20.6 Node 输出顺序固定【强制】
+
+每个 Node 必须严格遵守：
+
+1. SCENE / NODE 标题
+2. 时间
+3. 标题
+4. 【图片输入分配】
+5. 【音频输入分配】
+6. 【角色】
+7. 【镜头目标】
+8. 【旁白和台词】
+9. 独立英文 H3 Prompt
+10. 结束该 Node
+
+不得：
+
+* 将英文 H3 Prompt 提前到中文审核区之前
+* 将 Picture Mapping 放到正式 Prompt 后面
+* 将 Spoken Content 审核放到正式 Prompt 后面
+* 在正式 Prompt 后继续追加属于该 Node 正式 Prompt 的英文内容
+* 将两个 Node 的正式 Prompt 混合到同一个代码块
 
 ---
 
@@ -2244,8 +2461,12 @@ Spoken Dialogue 如果测试发现容易误读：
 
 不得直接复刻现实世界企业、人物、品牌、具体舰船造型。
 
-优先使用：Spaceship
+优先使用：
+
+Spaceship
+
 可以使用：
+
 * reusable spacecraft
 * orbital logistics
 * Mars launch infrastructure
@@ -2598,9 +2819,15 @@ XXX
 | -- | --- | --- | ----------------------- |
 | XX | XXX | XXX | 「XXX」                   |
 
-之后才开始正式：
+然后：
+
+**必须在一个独立的英文 Markdown fenced code block 中输出完整正式 H3 Prompt。**
+
+该代码块必须从：
 
 subject_definitions
+
+开始，并完整包含：
 
 summary
 
@@ -2611,6 +2838,20 @@ detailed_description
 overall_soundscape
 
 non_diegetic_music
+
+结束于：
+
+non_diegetic_music
+
+之后才结束该 Node。
+
+禁止：
+
+* 中文审核区与英文正式 Prompt 合并
+* 六个 H3 Section 拆成多个代码块
+* 正式 Prompt 后继续追加属于该 Prompt 的英文内容
+* 要求用户手动拼接多个代码块
+* 要求用户手动删除中文审核内容
 
 ---
 
@@ -2674,6 +2915,18 @@ non_diegetic_music
 
 【旁白和台词】是否与正式 Prompt 完全一致。
 
+## 输出结构
+
+是否：
+
+中文审核区
+→
+独立英文 Prompt
+
+是否：
+
+英文 Prompt 为唯一可复制生产区域。
+
 ---
 
 # 92. 最终 H3 Prompt 检查
@@ -2683,6 +2936,16 @@ non_diegetic_music
 * 六段 Full-Reference
 * 顺序正确
 * 没有错误使用基础结构
+* 六段全部处于同一个代码块
+* 代码块从 subject_definitions 开始
+* 代码块结束于 non_diegetic_music
+
+## Output Separation
+
+* 中文审核区与英文 Prompt 完全分离
+* 中文审核区没有进入英文 Prompt 复制区域
+* 英文 Prompt 之外没有额外正式 Prompt 内容
+* 每个 Node 只有一个正式英文 Prompt 复制区域
 
 ## Picture
 
@@ -2712,6 +2975,7 @@ non_diegetic_music
 * 自然日语
 * 每句只出现一次
 * 用户审阅版与正式版一致
+* 没有自行增加台词
 
 ## Numbers
 
@@ -2823,6 +3087,14 @@ Effects
 
 进行最终 Voice / Number / Continuity 检查。
 
+### Step 13
+
+确认中文审核区与英文生产区完全分离。
+
+### Step 14
+
+确认英文正式 Prompt 是唯一、完整、可直接复制的代码块。
+
 ---
 
 # 94. 核心制作哲学
@@ -2872,9 +3144,13 @@ Effects
 
 **核心女性角色是谁的声音。**
 
+输出结构决定：
+
+**哪些内容供用户审核，哪些内容直接用于生产。**
+
 ---
 
-# 95. 最重要的两个 Spoken Safety Rules
+# 95. 最重要的三个 Spoken Safety Rules
 
 ## Rule A
 
@@ -2921,18 +3197,40 @@ Effects
 禁止：
 
 3
+
 三
 
 88
+
 八十八
 
 2.2
+
 二点二
 
 500
+
 五百
 
 出现在最终 Spoken Dialogue 中。
+
+## Rule C
+
+每个 Node：
+
+中文审核区与英文生产区必须完全分离。
+
+中文审核区：
+
+负责审核。
+
+英文独立代码块：
+
+负责生产。
+
+英文正式 Prompt：
+
+必须只有一个完整、连续、可直接复制的代码块。
 
 ---
 
@@ -2978,10 +3276,16 @@ Prompt 控制数字
 
 **书面文本追求信息准确。**
 
-**审阅区追求声音可控。**
+**审核区追求声音可控。**
 
 **Spoken Dialogue 追求 H3 可读。**
 
 **Voice Reference 追求角色声音连续。**
 
 **Worldbuilding 追求长期一致。**
+
+**中文审核层负责审核。**
+
+**英文独立 Prompt 复制区域负责生产。**
+
+**一个 Node 只能有一个最终英文 H3 Prompt 复制区域。**
