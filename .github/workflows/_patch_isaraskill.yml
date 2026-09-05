@@ -1,0 +1,257 @@
+name: Patch isaraskill output format
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/_patch_isaraskill.yml'
+      - 'image/isaraskill.md'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch isaraskill.md
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('image/isaraskill.md')
+          text = path.read_text(encoding='utf-8')
+
+          marker = '# 20.1. 中文审核区与英文正式 Prompt 必须完全分离〖最高优先级〗'
+          if marker in text:
+              print('Patch already present; nothing to do.')
+              raise SystemExit(0)
+
+          anchor = '# 21. 【旁白和台词】的目的'
+          if anchor not in text:
+              raise SystemExit('Could not find insertion anchor.')
+
+          block = r'''# 20.1. 中文审核区与英文正式 Prompt 必须完全分离〖最高优先级〗
+
+每个 SCENE / NODE 的最终输出必须严格分为两个完全独立的区域：
+
+**区域 A：中文 Node 审核区**
+
+用于用户审核：
+
+* 时间
+* 标题
+* 图片输入分配
+* 音频输入分配
+* 角色
+* 镜头目标
+* 旁白和台词
+
+**区域 B：英文 MiniMax H3 正式 Prompt**
+
+用于直接提交 MiniMax H3 / ComfyUI。
+
+二者必须在视觉上和复制区域上完全分离。
+
+禁止把中文审核区与英文正式 Prompt 放进同一个代码块、Writing Block、引用块或其他单一可复制区域。
+
+正确结构必须是：
+
+中文 Node 审核区
+
+然后：
+
+独立英文 H3 Prompt 代码块
+
+英文正式 Prompt 必须从：
+
+subject_definitions
+
+开始，并且必须完整包含以下六个固定 Section：
+
+subject_definitions
+summary
+retention_analysis
+detailed_description
+overall_soundscape
+non_diegetic_music
+
+一直到：
+
+non_diegetic_music
+
+结束。
+
+---
+
+# 20.2. 英文 H3 Prompt 必须提供独立单一复制区域〖强制〗
+
+每个 Node 的正式 H3 Prompt 必须放在一个独立的 Markdown fenced code block 中。
+
+推荐形式：
+
+```text
+subject_definitions
+
+...
+
+summary
+
+...
+
+retention_analysis
+
+...
+
+detailed_description
+
+...
+
+overall_soundscape
+
+...
+
+non_diegetic_music
+
+...
+```
+
+该代码块之外不得放入任何属于正式 H3 Prompt 的内容。
+
+用户必须能够直接点击该代码块的复制按钮，一次性复制整个英文 H3 Prompt，然后直接粘贴到 MiniMax H3 / ComfyUI。
+
+---
+
+# 20.3. 中文审核区不得进入正式 Prompt 复制区域〖强制〗
+
+以下内容只能存在于中文审核区，不得因为排版方便而混入英文正式 Prompt 代码块：
+
+* 时间
+* 标题
+* 【图片输入分配】
+* 【音频输入分配】
+* 【角色】
+* 【镜头目标】
+* 中文剧情解释
+* 中文制作备注
+* 中文 Spoken Content 审核说明
+* 中文输入节点说明
+
+正式 Prompt 只能包含真正需要交给 H3 的英文控制内容。
+
+---
+
+# 20.4. 正式 Prompt 不得拆分成多个复制区域〖强制〗
+
+同一个 Node 的：
+
+subject_definitions
+summary
+retention_analysis
+detailed_description
+overall_soundscape
+non_diegetic_music
+
+必须全部位于同一个英文代码块中。
+
+禁止把六个 Section 分散到多个独立代码块。
+
+用户不应需要手动拼接多个代码块才能得到最终 H3 Prompt。
+
+---
+
+# 20.5. Node 输出顺序〖强制〗
+
+每个 Node 必须严格按照以下顺序输出：
+
+1. SCENE / NODE 标题
+2. 时间
+3. 标题
+4. 【图片输入分配】
+5. 【音频输入分配】
+6. 【角色】
+7. 【镜头目标】
+8. 【旁白和台词】
+9. 独立英文 H3 Prompt 代码块
+10. 结束该 Node
+
+不得先输出英文正式 Prompt，再补充中文审核区。
+
+不得把属于其他 Node 的 Prompt 内容混入当前 Node。
+
+---
+
+# 20.6. 无对白 Node 也必须保持相同结构
+
+即使 Node：
+
+* 没有对白
+* 没有旁白
+* 没有固定 Audio
+* 没有人物
+* 少于15秒
+* 只有环境镜头
+
+仍必须使用相同的：
+
+中文审核区
+→
+独立英文 H3 Prompt 代码块
+
+结构。
+
+如果没有 Spoken Content：
+
+【旁白和台词】中使用：
+
+| 时间 | 说话者 | 类型 | 最终 Spoken Dialogue / 旁白 |
+| --- | --- | --- | --- |
+| — | — | — | No dialogue. |
+
+---
+
+# 20.7. 审核层与生产层的职责分离〖强制〗
+
+中文审核区负责：
+
+**审核。**
+
+英文独立 Prompt 负责：
+
+**生产。**
+
+用户不得被要求：
+
+* 从中文审核区复制内容后再拼接英文 Prompt
+* 从多个代码块拼接 H3 Prompt
+* 手动删除中文说明
+* 手动删除图片表格
+* 手动删除音频表格
+* 手动组合六个 H3 Section
+
+一个 Node 必须存在一个、且只有一个最终英文 H3 Prompt 复制区域。
+
+---
+
+'''
+
+          text = text.replace(anchor, block + anchor, 1)
+          path.write_text(text, encoding='utf-8')
+          print('Patch inserted successfully.')
+          PY
+
+      - name: Commit patched skill
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add image/isaraskill.md
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Enforce separated H3 review and prompt output format'
+          git push
